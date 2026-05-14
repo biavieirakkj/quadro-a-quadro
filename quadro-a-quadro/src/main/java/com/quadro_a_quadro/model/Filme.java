@@ -1,0 +1,136 @@
+package com.quadro_a_quadro.model;
+
+import com.quadro_a_quadro.model.enums.StatusFilme;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.List;
+
+@Entity
+@Table(name = "filme")
+public class Filme {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Título é obrigatório")
+    @Size(max = 200, message = "Título deve ter no máximo 200 caracteres")
+    @Column(nullable = false, unique = true, length = 200)
+    private String titulo;
+
+    @Size(max = 500, message = "Sinopse deve ter no máximo 500 caracteres")
+    @Column(length = 500)
+    private String sinopse;
+
+    @NotBlank(message = "Duração é obrigatória")
+    @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+             message = "Duração deve estar no formato HH:MM:SS")
+    @Column(nullable = false)
+    private String duracao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusFilme status = StatusFilme.EM_BREVE;
+
+    @ManyToOne
+    @JoinColumn(name = "id_classificacao", nullable = false)
+    @NotNull(message = "Classificação é obrigatória")
+    private Classificacao classificacao;
+
+    @ManyToMany
+    @JoinTable(
+        name = "filme_genero",
+        joinColumns = @JoinColumn(name = "id_filme"),
+        inverseJoinColumns = @JoinColumn(name = "id_genero")
+    )
+    private List<Genero> generos;
+
+    @ManyToMany
+    @JoinTable(
+        name = "exibicao_sala",
+        joinColumns = @JoinColumn(name = "id_filme"),
+        inverseJoinColumns = @JoinColumn(name = "numero_sala")
+    )
+    private List<Sala> salas;
+
+    // Getters e Setters
+    public Long getId() 
+    { 
+        return id; 
+    }
+
+    public void setId(Long id) 
+    { 
+        this.id = id; 
+    }
+
+    public String getTitulo() 
+    { 
+        return titulo; 
+    }
+
+    public void setTitulo(String titulo) 
+    { 
+        this.titulo = titulo; 
+    }
+
+    public String getSinopse() 
+    { 
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) 
+    { 
+        this.sinopse = sinopse; 
+    }
+
+    public String getDuracao() 
+    { 
+        return duracao; 
+    }
+
+    public void setDuracao(String duracao) 
+    { 
+        this.duracao = duracao; 
+    }
+
+    public StatusFilme getStatus() 
+    { 
+        return status; 
+    }
+
+    public void setStatus(StatusFilme status) 
+    { 
+        this.status = status; 
+    }
+
+    public Classificacao getClassificacao() 
+    { 
+        return classificacao; 
+    }
+
+    public void setClassificacao(Classificacao classificacao) 
+    { 
+        this.classificacao = classificacao; 
+    }
+
+    public List<Genero> getGeneros() 
+    { 
+        return generos; 
+    }
+
+    public void setGeneros(List<Genero> generos) 
+    { 
+        this.generos = generos; 
+    }
+
+    public List<Sala> getSalas() 
+    { 
+        return salas; 
+    }
+
+    public void setSalas(List<Sala> salas) 
+    { 
+        this.salas = salas; 
+    }
+}
