@@ -5,6 +5,13 @@ import com.quadro_a_quadro.model.enums.StatusFilme;
 import com.quadro_a_quadro.repository.FilmeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +22,32 @@ public class FilmeService
     private FilmeRepository filmeRepository;
 
     //cadastrar filme
-    public Filme cadastrar(Filme filme) 
+    public Filme cadastrar(Filme filme, MultipartFile capa) throws IOException 
     {
         validarTituloDuplicado(filme.getTitulo(), null);
+
+        if (capa != null && !capa.isEmpty()) {
+            String nomeArquivo = salvarImagem(capa);
+            filme.setCapa(nomeArquivo);
+        }
+
         return filmeRepository.save(filme);
     }
+
+    private String salvarImagem(MultipartFile arquivo) throws IOException 
+    {
+    // cria pasta se não existir
+        Path pastaUpload = Paths.get("uploads/capas");
+        Files.createDirectories(pastaUpload);
+
+        String nomeArquivo = UUID.randomUUID() + "_" + arquivo.getOriginalFilename();
+
+    // salva o arquivo na pasta
+        Path destino = pastaUpload.resolve(nomeArquivo);
+        Files.copy(arquivo.getInputStream(), destino);
+
+        return nomeArquivo;
+    }   
 
     //listar filmes
     public List<Filme> listarTodos() 
@@ -28,7 +56,7 @@ public class FilmeService
     }
 
     //editar filme
-    public Filme editar(Long id, Filme filmeAtualizado) 
+    public Filme editar(Long id, Filme filmeAtualizado, MultipartFile capa) throws IOException 
     {
         Filme filme = buscarPorId(id);
         validarTituloDuplicado(filmeAtualizado.getTitulo(), id);
@@ -40,8 +68,14 @@ public class FilmeService
         filme.setGeneros(filmeAtualizado.getGeneros());
         filme.setStatus(filmeAtualizado.getStatus());
 
-        return filmeRepository.save(filme);
-    }
+        if (capa != null && !capa.isEmpty()) {
+            String nomeArquivo = salvarImagem(capa);
+            filme.setCapa(nomeArquivo);
+        }
+
+    return filmeRepository.save(filme);
+}
+
 
     // excluir filme
     public void excluir(Long id) 

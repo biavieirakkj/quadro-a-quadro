@@ -1,5 +1,6 @@
 package com.quadro_a_quadro.model;
 
+import com.quadro_a_quadro.model.enums.GeneroFilme;
 import com.quadro_a_quadro.model.enums.StatusFilme;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -12,6 +13,9 @@ public class Filme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String capa;
 
     @NotBlank(message = "Título é obrigatório")
     @Size(max = 200, message = "Título deve ter no máximo 200 caracteres")
@@ -37,13 +41,12 @@ public class Filme {
     @NotNull(message = "Classificação é obrigatória")
     private Classificacao classificacao;
 
-    @ManyToMany
-    @JoinTable(
-        name = "filme_genero",
-        joinColumns = @JoinColumn(name = "id_filme"),
-        inverseJoinColumns = @JoinColumn(name = "id_genero")
-    )
-    private List<Genero> generos;
+    @ElementCollection
+    @CollectionTable(name = "filme_genero", 
+    joinColumns = @JoinColumn(name = "id_filme"))
+    @Column(name = "genero")
+    @Enumerated(EnumType.STRING)
+    private List<GeneroFilme> generos;
 
     @ManyToMany
     @JoinTable(
@@ -94,6 +97,16 @@ public class Filme {
         this.duracao = duracao; 
     }
 
+    public List<GeneroFilme> getGeneros() 
+    { 
+        return generos; 
+    }
+
+    public void setGeneros(List<GeneroFilme> generos) 
+    { 
+        this.generos = generos; 
+    }
+
     public StatusFilme getStatus() 
     { 
         return status; 
@@ -114,14 +127,14 @@ public class Filme {
         this.classificacao = classificacao; 
     }
 
-    public List<Genero> getGeneros() 
+    public String getCapa() 
     { 
-        return generos; 
+        return capa;   
     }
 
-    public void setGeneros(List<Genero> generos) 
+    public void setCapa(String capa) 
     { 
-        this.generos = generos; 
+        this.capa = capa; 
     }
 
     public List<Sala> getSalas() 

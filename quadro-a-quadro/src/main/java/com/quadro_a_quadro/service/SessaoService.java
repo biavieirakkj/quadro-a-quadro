@@ -4,6 +4,8 @@ import com.quadro_a_quadro.model.Sessao;
 import com.quadro_a_quadro.repository.SessaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -62,6 +64,18 @@ public class SessaoService
     {
         buscarPorId(id);
         sessaoRepository.deleteById(id);
+    }
+
+    // buscar por data
+
+// buscar por nome da sala
+    public List<Sessao> buscarPorSala(String busca) {
+        return sessaoRepository.findBySalaNomeContainingIgnoreCase(busca);
+    }
+
+    public List<Sessao> listarPorData(LocalDate data) 
+    {
+    return sessaoRepository.findByData(data);
     }
 
     //listar sessões de um filme
