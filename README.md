@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/preview.png" alt="Quadro a Quadro">
+  <img src=".github/tela_principal.png"/>
 </p>
 
 # Quadro a Quadro
