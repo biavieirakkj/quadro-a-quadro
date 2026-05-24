@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitar Acesso - Quadro a Quadro</title>
-    <link rel="stylesheet" th:href="@{../../static/css/style.css}" />
+    <link rel="stylesheet" th:href="@{css/style.css}" />
 </head>
 
 <body class="auth-page">
 
     <main class="auth-card">
-        <h1>🎬 Solicitar acesso</h1>
+        <h1 class="auth" >Solicitar acesso</h1>
 
         <!-- erro -->
         <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>

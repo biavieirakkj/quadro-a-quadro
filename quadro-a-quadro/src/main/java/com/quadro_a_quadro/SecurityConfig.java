@@ -42,7 +42,6 @@ public class SecurityConfig {
                 .permitAll()
             );
 
-        // libera h2-console para desenvolvimento
         http.csrf(csrf -> csrf
             .ignoringRequestMatchers("/h2-console/**"))
             .headers(headers -> headers

@@ -6,13 +6,13 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f0e8;
+    background-color: #FFFCE9;
     color: #3b2a1a;
     min-height: 100vh;
 }
 
 nav {
-    background-color: #f5f0e8;
+    background-color: #FFFCE9;
     padding: 16px 48px;
     display: flex;
     align-items: center;
@@ -59,7 +59,7 @@ dialog::backdrop {
 dialog h2 {
     font-size: 20px;
     font-weight: 700;
-    color: #7a5c3a;
+    color: #7F5539;
     margin-bottom: 24px;
     text-align: center;
 }
@@ -131,6 +131,10 @@ h1 {
     margin-bottom: 24px;
 }
 
+h1.auth {
+    color: #7F5539;
+}
+
 /* ========== MENSAGENS ========== */
 .mensagem-sucesso {
     background-color: #d4edda;
@@ -143,7 +147,7 @@ h1 {
 
 .mensagem-erro {
     background-color: #f8d7da;
-    color: #721c24;
+    color: #7F5539;
     padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 16px;
@@ -199,7 +203,7 @@ h1 {
 
 /* ========== BOTÕES ========== */
 .btn-primario {
-    background-color: #5c3d1e;
+    background-color: #556C3B;
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -217,8 +221,8 @@ h1 {
 
 .btn-secundario {
     background-color: transparent;
-    color: #5c3d1e;
-    border: 1px solid #5c3d1e;
+    color: #556C3B;
+    border: 1px solid #556C3B;
     border-radius: 8px;
     padding: 10px 20px;
     font-size: 14px;
@@ -273,7 +277,7 @@ thead th {
     text-align: left;
     font-size: 14px;
     font-weight: 600;
-    color: #7a5c3a;
+    color: #7F5539;
 }
 
 tbody tr {
@@ -307,7 +311,7 @@ tbody td {
     background: none;
     border: none;
     cursor: pointer;
-    color: #7a5c3a;
+    color: #7F5539;
     font-size: 16px;
     padding: 4px;
     border-radius: 4px;
@@ -337,7 +341,7 @@ tbody td {
     justify-content: space-between;
     padding: 12px 4px;
     font-size: 14px;
-    color: #7a5c3a;
+    color: #7F5539;
 }
 
 .paginacao-info {
@@ -366,7 +370,7 @@ tbody td {
     background: none;
     border: none;
     cursor: pointer;
-    color: #7a5c3a;
+    color: #7F5539;
     font-size: 16px;
     padding: 4px 8px;
     border-radius: 4px;
@@ -407,7 +411,7 @@ tbody td {
 .modal h2 {
     font-size: 20px;
     font-weight: 700;
-    color: #7a5c3a;
+    color: #7F5539;
     margin-bottom: 24px;
     text-align: center;
 }
@@ -464,7 +468,7 @@ tbody td {
 
 /* ========== LOGIN E REGISTRO ========== */
 .auth-page {
-    background-color: #7a5230;
+    background-color: #7F5539;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -532,7 +536,7 @@ p.auth-separador::after {
 }
 
 .auth-campo span {
-    color: #7a5c3a;
+    color: #7F5539;
     font-size: 16px;
 }
 
@@ -568,8 +572,8 @@ p.auth-separador::after {
 .btn-auth-secundario {
     width: 100%;
     background-color: transparent;
-    color: #3b2a1a;
-    border: 1px solid #d9d0c0;
+    color: #556C3B;
+    border: 1px solid #556C3B;
     border-radius: 8px;
     padding: 12px;
     font-size: 14px;
@@ -584,7 +588,7 @@ p.auth-separador::after {
 
 .btn-primario-full {
     width: 100%;
-    background-color: #5c3d1e;
+    background-color: #556C3B;
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -596,7 +600,7 @@ p.auth-separador::after {
 }
 
 .btn-primario-full:hover {
-    background-color: #3b2a1a;
+    background-color: #43552e;
 }
 
 /* ========== GRID DE FILMES ========== */
@@ -653,7 +657,7 @@ p.auth-separador::after {
 .filme-card-genero {
     display: inline-block;
     background-color: #f0ebe0;
-    color: #7a5c3a;
+    color: #7F5539;
     font-size: 12px;
     font-weight: 500;
     padding: 4px 10px;
