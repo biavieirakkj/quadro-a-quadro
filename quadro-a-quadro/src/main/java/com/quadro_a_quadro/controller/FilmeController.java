@@ -2,9 +2,9 @@ package com.quadro_a_quadro.controller;
 
 import com.quadro_a_quadro.model.Filme;
 import com.quadro_a_quadro.model.enums.StatusFilme;
+import com.quadro_a_quadro.model.enums.ClassificacaoFilme;
 import com.quadro_a_quadro.model.enums.GeneroFilme;
 import com.quadro_a_quadro.service.FilmeService;
-import com.quadro_a_quadro.service.ClassificacaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +20,6 @@ public class FilmeController {
 
     @Autowired
     private FilmeService filmeService;
-
-    @Autowired
-    private ClassificacaoService classificacaoService;
 
     // RF002 - Listar filmes
     @GetMapping
@@ -46,7 +43,7 @@ public class FilmeController {
     @GetMapping("/novo")
     public String exibirFormularioCadastro(Model model) {
         model.addAttribute("filme", new Filme());
-        model.addAttribute("classificacoes", classificacaoService.listarTodas());
+        model.addAttribute("classificacoes", ClassificacaoFilme.values());
         model.addAttribute("generos", GeneroFilme.values());
         model.addAttribute("statusList", StatusFilme.values());
         return "filmes/formulario";
@@ -59,21 +56,25 @@ public class FilmeController {
             BindingResult resultado,
             @RequestParam("capa") MultipartFile capa,
             RedirectAttributes redirectAttributes,
-            Model model) {
+            Model model) 
+    {
 
-        if (resultado.hasErrors()) {
-            model.addAttribute("classificacoes", classificacaoService.listarTodas());
+        if (resultado.hasErrors()) 
+        {
+            model.addAttribute("classificacoes", ClassificacaoFilme.values());
             model.addAttribute("generos", GeneroFilme.values());
             model.addAttribute("statusList", StatusFilme.values());
             return "filmes/formulario";
         }
 
-        try {
+        try 
+        {
             filmeService.cadastrar(filme, capa);
             redirectAttributes.addFlashAttribute("sucesso", "Filme cadastrado com sucesso!");
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             model.addAttribute("erro", e.getMessage());
-            model.addAttribute("classificacoes", classificacaoService.listarTodas());
+            model.addAttribute("classificacoes", ClassificacaoFilme.values());
             model.addAttribute("generos", GeneroFilme.values());
             model.addAttribute("statusList", StatusFilme.values());
             return "filmes/formulario";
@@ -84,9 +85,10 @@ public class FilmeController {
 
     // RF003 - Exibir formulário de edição
     @GetMapping("/editar/{id}")
-    public String exibirFormularioEdicao(@PathVariable Long id, Model model) {
+    public String exibirFormularioEdicao(@PathVariable Long id, Model model) 
+    {
         model.addAttribute("filme", filmeService.buscarPorId(id));
-        model.addAttribute("classificacoes", classificacaoService.listarTodas());
+        model.addAttribute("classificacoes", ClassificacaoFilme.values());
         model.addAttribute("generos", GeneroFilme.values());
         model.addAttribute("statusList", StatusFilme.values());
         return "filmes/formulario";
@@ -102,19 +104,21 @@ public class FilmeController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        if (resultado.hasErrors()) {
-            model.addAttribute("classificacoes", classificacaoService.listarTodas());
+        if (resultado.hasErrors()) 
+        {
+            model.addAttribute("classificacoes", ClassificacaoFilme.values());
             model.addAttribute("generos", GeneroFilme.values());
             model.addAttribute("statusList", StatusFilme.values());
             return "filmes/formulario";
         }
 
-        try {
+        try 
+        {
             filmeService.editar(id, filme, capa);
             redirectAttributes.addFlashAttribute("sucesso", "Filme editado com sucesso!");
         } catch (Exception e) {
             model.addAttribute("erro", e.getMessage());
-            model.addAttribute("classificacoes", classificacaoService.listarTodas());
+            model.addAttribute("classificacoes", ClassificacaoFilme.values());
             model.addAttribute("generos", GeneroFilme.values());
             model.addAttribute("statusList", StatusFilme.values());
             return "filmes/formulario";

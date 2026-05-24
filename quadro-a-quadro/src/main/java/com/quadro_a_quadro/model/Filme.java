@@ -2,6 +2,7 @@ package com.quadro_a_quadro.model;
 
 import com.quadro_a_quadro.model.enums.GeneroFilme;
 import com.quadro_a_quadro.model.enums.StatusFilme;
+import com.quadro_a_quadro.model.enums.ClassificacaoFilme;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.List;
@@ -36,10 +37,9 @@ public class Filme {
     @Column(nullable = false)
     private StatusFilme status = StatusFilme.EM_BREVE;
 
-    @ManyToOne
-    @JoinColumn(name = "id_classificacao", nullable = false)
-    @NotNull(message = "Classificação é obrigatória")
-    private Classificacao classificacao;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ClassificacaoFilme classificacao;
 
     @ElementCollection
     @CollectionTable(name = "filme_genero", 
@@ -117,12 +117,12 @@ public class Filme {
         this.status = status; 
     }
 
-    public Classificacao getClassificacao() 
+    public ClassificacaoFilme getClassificacao() 
     { 
         return classificacao; 
     }
 
-    public void setClassificacao(Classificacao classificacao) 
+    public void setClassificacao(ClassificacaoFilme classificacao) 
     { 
         this.classificacao = classificacao; 
     }
