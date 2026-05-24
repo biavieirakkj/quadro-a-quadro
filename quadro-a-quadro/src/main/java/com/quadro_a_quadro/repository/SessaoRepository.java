@@ -21,7 +21,8 @@ public interface SessaoRepository extends JpaRepository<Sessao, Long>
         LocalTime horario
     );
 
-    List<Sessao> findBySalaNomeContainingIgnoreCase(String nome);
+    // coloca isso — busca pelo numSala da sala
+    List<Sessao> findBySalaNumSalaContaining(Long numSala);
 
     List<Sessao> findByFilmeId(Long filmeId);
 

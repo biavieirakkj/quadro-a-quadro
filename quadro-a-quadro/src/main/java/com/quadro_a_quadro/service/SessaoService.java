@@ -69,8 +69,14 @@ public class SessaoService
     // buscar por data
 
 // buscar por nome da sala
-    public List<Sessao> buscarPorSala(String busca) {
-        return sessaoRepository.findBySalaNomeContainingIgnoreCase(busca);
+    public List<Sessao> buscarPorSala(String busca) 
+    {
+        try {
+            Long numSala = Long.parseLong(busca);
+            return sessaoRepository.findBySalaNumSalaContaining(numSala);
+        } catch (NumberFormatException e) {
+            return sessaoRepository.findAll();
+        }
     }
 
     public List<Sessao> listarPorData(LocalDate data) 

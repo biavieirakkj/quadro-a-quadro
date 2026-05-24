@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quadro a Quadro</title>
+    <link rel="stylesheet" th:href="@{../../static/css/style.css}" />
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card">
+        <h1>🎬 Login</h1>
+
+        <!-- erro de login -->
+        <p th:if="${param.error}" class="mensagem-erro">
+            Email ou senha inválidos, ou conta pendente de aprovação.
+        </p>
+
+        <!-- mensagem de sucesso vinda do registro -->
+        <p th:if="${sucesso}" class="mensagem-sucesso" th:text="${sucesso}"></p>
+
+        <form th:action="@{/login}" method="post">
+
+            <label class="auth-campo">
+                <span>@</span>
+                <input type="email"
+                       name="username"
+                       placeholder="E-mail"
+                       required
+                       autofocus />
+            </label>
+
+            <label class="auth-campo">
+                <span>🔒</span>
+                <input type="password"
+                       name="password"
+                       placeholder="Senha"
+                       required />
+            </label>
+
+            <p class="auth-link">
+                <a th:href="@{#}">Esqueci minha senha</a>
+            </p>
+
+            <button type="submit" class="btn-primario-full">Entrar</button>
+
+        </form>
+
+        <p class="auth-separador">Ou</p>
+
+        <a th:href="@{/registro}">
+            <button type="button" class="btn-auth-secundario">Solicitar acesso</button>
+        </a>
+
+    </main>
+
+</body>
+</html>

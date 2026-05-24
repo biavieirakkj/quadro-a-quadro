@@ -37,7 +37,7 @@ public class FilmeService
     private String salvarImagem(MultipartFile arquivo) throws IOException 
     {
     // cria pasta se não existir
-        Path pastaUpload = Paths.get("uploads/capas");
+        Path pastaUpload = Paths.get("../uploads/capas");
         Files.createDirectories(pastaUpload);
 
         String nomeArquivo = UUID.randomUUID() + "_" + arquivo.getOriginalFilename();

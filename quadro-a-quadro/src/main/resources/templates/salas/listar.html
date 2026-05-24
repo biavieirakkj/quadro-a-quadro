@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salas - Quadro a Quadro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <span>🎬 Quadro a Quadro</span>
+            <ul>
+                <li><a th:href="@{/filmes}">Filmes</a></li>
+                <li><a th:href="@{/salas}" class="active">Salas</a></li>
+                <li><a th:href="@{/sessoes}">Sessões</a></li>
+                <li><a th:href="@{/usuarios}">Usuários</a></li>
+                <li><a th:href="@{/logout}">→</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Salas</h1>
+
+        <!-- mensagens -->
+        <p th:if="${sucesso}" class="mensagem-sucesso" th:text="${sucesso}"></p>
+        <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
+
+        <!-- barra de ações -->
+        <section class="barra-acoes">
+            <form th:action="@{/salas}" method="get">
+                <label class="barra-busca">
+                    <span>🔍</span>
+                    <input type="text"
+                           name="busca"
+                           th:value="${busca}"
+                           placeholder="Buscar por sala" />
+                </label>
+                <button type="submit" class="btn-filtro">⚙️</button>
+            </form>
+            <button class="btn-primario"
+                    onclick="abrirModal('modalNovaSala')">
+                + Nova sala
+            </button>
+        </section>
+
+        <!-- tabela -->
+        <section class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sala</th>
+                        <th>Capacidade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="sala : ${salas}">
+                        <td th:text="${sala.numSala}"></td>
+                        <td th:text="${sala.capacidade}"></td>
+                        <td class="acoes">
+                            <button class="btn-acao"
+                                    th:onclick="'abrirModalEditar(' + ${sala.numSala} + ', \'' + ${sala.capacidade} + '\')'">
+                                ✏️
+                            </button>
+                            <form th:action="@{/salas/excluir/{id}(id=${sala.numSala})}"
+                                  method="post"
+                                  onsubmit="return confirm('Deseja excluir esta sala?')">
+                                <button type="submit" class="btn-acao excluir">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(salas)}">
+                        <td colspan="3" class="tabela-vazia">
+                            Nenhuma sala cadastrada.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- paginação -->
+        <section class="paginacao">
+            <label class="paginacao-info">
+                Resultados por página
+                <select>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                </select>
+            </label>
+            <nav class="paginacao-botoes" aria-label="Paginação">
+                <button>«</button>
+                <button>‹</button>
+                <span>Página 1 de 1</span>
+                <button>›</button>
+                <button>»</button>
+            </nav>
+        </section>
+    </main>
+
+    <footer>
+        <p>M-JIB Systems &copy; 2025</p>
+    </footer>
+
+    <!-- MODAL NOVA SALA -->
+    <dialog id="modalNovaSala">
+        <h2>Nova sala</h2>
+        <form th:action="@{/salas/nova}" method="post">
+            <label>
+                Nome
+                <input type="text"
+                       name="numSala"
+                       placeholder="Sala 01"
+                       required />
+            </label>
+
+            <label>
+                Capacidade
+                <input type="number"
+                       name="capacidade"
+                       placeholder="50"
+                       min="20"
+                       max="200"
+                       required />
+            </label>
+
+            <menu>
+                <button type="button"
+                        class="btn-secundario"
+                        onclick="fecharModal('modalNovaSala')">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primario">Salvar</button>
+            </menu>
+        </form>
+    </dialog>
+
+    <!-- MODAL EDITAR SALA -->
+    <dialog id="modalEditarSala">
+        <h2>Editar sala</h2>
+        <form id="formEditarSala" method="post">
+            <label>
+                Nome
+                <input type="text"
+                       id="editarNomeSala"
+                       name="numSala"
+                       required />
+            </label>
+
+            <label>
+                Capacidade
+                <input type="number"
+                       id="editarCapacidadeSala"
+                       name="capacidade"
+                       min="20"
+                       max="200"
+                       required />
+            </label>
+
+            <menu>
+                <button type="button"
+                        class="btn-secundario"
+                        onclick="fecharModal('modalEditarSala')">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primario">Salvar</button>
+            </menu>
+        </form>
+    </dialog>
+
+    <script th:src="@{../../static/js/salaModal.js}"></script>
+
+</body>
+</html>

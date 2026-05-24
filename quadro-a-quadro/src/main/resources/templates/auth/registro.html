@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Acesso - Quadro a Quadro</title>
+    <link rel="stylesheet" th:href="@{../../static/css/style.css}" />
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card">
+        <h1>🎬 Solicitar acesso</h1>
+
+        <!-- erro -->
+        <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
+
+        <form th:action="@{/registro}"
+              th:object="${usuario}"
+              method="post">
+
+            <label class="auth-campo">
+                <span>👤</span>
+                <input type="text"
+                       th:field="*{nome}"
+                       placeholder="Nome"
+                       required />
+            </label>
+            <p th:if="${#fields.hasErrors('nome')}"
+               class="mensagem-erro"
+               th:errors="*{nome}"></p>
+
+            <label class="auth-campo">
+                <span>✉️</span>
+                <input type="email"
+                       th:field="*{email}"
+                       placeholder="E-mail"
+                       required />
+            </label>
+            <p th:if="${#fields.hasErrors('email')}"
+               class="mensagem-erro"
+               th:errors="*{email}"></p>
+
+            <label class="auth-campo">
+                <span>🔒</span>
+                <input type="password"
+                       th:field="*{senha}"
+                       placeholder="Senha"
+                       required />
+            </label>
+            <p th:if="${#fields.hasErrors('senha')}"
+               class="mensagem-erro"
+               th:errors="*{senha}"></p>
+
+            <p class="auth-link">
+                Já tem conta? <a th:href="@{/login}">Clique aqui</a>
+            </p>
+
+            <button type="submit" class="btn-primario-full">Solicitar acesso</button>
+
+        </form>
+
+    </main>
+
+</body>
+</html>
