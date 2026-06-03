@@ -6,11 +6,16 @@ import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "sala")
-public class Sala
-{
+public class Sala {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long numSala;
+    private Long id;
+
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(max = 50, message = "Nome deve ter no máximo 50 caracteres")
+    @Column(nullable = false, unique = true)
+    private String numSala;
 
     @NotNull(message = "Capacidade é obrigatória")
     @Min(value = 20, message = "Capacidade mínima é 20 assentos")
@@ -23,34 +28,15 @@ public class Sala
     private StatusSala status = StatusSala.ATIVO;
 
     // Getters e Setters
-    public Long getNumSala() 
-    { 
-        return numSala; 
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setNumSala(Long numSala) 
-    { 
-        this.numSala = numSala; 
-    }
+    public String getNumSala() { return numSala; }
+    public void setNumSala(String numSala) { this.numSala = numSala; }
 
-    public Integer getCapacidade() 
-    { 
-        return capacidade; 
-    }
+    public Integer getCapacidade() { return capacidade; }
+    public void setCapacidade(Integer capacidade) { this.capacidade = capacidade; }
 
-    public void setCapacidade(Integer capacidade) 
-    { 
-        this.capacidade = capacidade; 
-    }
-
-    public StatusSala getStatus() 
-    { 
-        return status; 
-    }
-
-    public void setStatus(StatusSala status) 
-    { 
-        this.status = status; 
-    }
-
+    public StatusSala getStatus() { return status; }
+    public void setStatus(StatusSala status) { this.status = status; }
 }

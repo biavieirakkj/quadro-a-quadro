@@ -8,23 +8,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface SessaoRepository extends JpaRepository<Sessao, Long> 
-{
-
+public interface SessaoRepository extends JpaRepository<Sessao, Long> {
     List<Sessao> findByData(LocalDate data);
 
-    // verifica conflito de horário na sala 
-    boolean existsBySalaNumSalaAndDataAndHorario
-    (
-        Long numSala,
+    boolean existsBySalaNumSalaAndDataAndHorario(
+        String numSala,
         LocalDate data,
         LocalTime horario
     );
 
-    // coloca isso — busca pelo numSala da sala
-    List<Sessao> findBySalaNumSalaContaining(Long numSala);
-
     List<Sessao> findByFilmeId(Long filmeId);
-
-    List<Sessao> findBySalaNumSala(Long numSala);
+    List<Sessao> findBySalaNumSalaContainingIgnoreCase(String numSala);
 }

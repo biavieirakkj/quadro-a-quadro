@@ -13,52 +13,45 @@ public class SalaService {
     @Autowired
     private SalaRepository salaRepository;
 
-    //cadastrar sala
-    public Sala cadastrar(Sala sala) 
-    {
+    public Sala cadastrar(Sala sala) {
+        if (salaRepository.findByNumSala(sala.getNumSala()).isPresent())
+            throw new RuntimeException("Já existe uma sala com esse nome");
         return salaRepository.save(sala);
     }
 
-    //listar salas
-    public List<Sala> listarTodas() 
-    {
+    public List<Sala> listarTodas() {
         return salaRepository.findAll();
     }
 
-    //editar sala
-    public Sala editar(Long id, Sala salaAtualizada) 
-    {
+    public Sala editar(Long id, Sala salaAtualizada) {
         Sala sala = buscarPorId(id);
+        sala.setNumSala(salaAtualizada.getNumSala());
         sala.setCapacidade(salaAtualizada.getCapacidade());
         sala.setStatus(salaAtualizada.getStatus());
         return salaRepository.save(sala);
     }
 
-    //excluir sala
-    public void excluir(Long id) 
-    {
+    public void excluir(Long id) {
         buscarPorId(id);
         salaRepository.deleteById(id);
     }
 
-    //ativar/desativar sala
-    public Sala alterarStatus(Long id, StatusSala novoStatus) 
-    {
+    public Sala alterarStatus(Long id, StatusSala novoStatus) {
         Sala sala = buscarPorId(id);
         sala.setStatus(novoStatus);
         return salaRepository.save(sala);
     }
 
-    //buscar por ID (uso interno)
-    public Sala buscarPorId(Long id) 
-    {
+    public Sala buscarPorId(Long id) {
         return salaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Sala não encontrada de id: " + id));
+            .orElseThrow(() -> new RuntimeException("Sala não encontrada com id: " + id));
     }
 
-    //listar salas ativas
-    public List<Sala> listarAtivas() 
-    {
+    public List<Sala> listarAtivas() {
         return salaRepository.findByStatus(StatusSala.ATIVO);
+    }
+
+    public List<Sala> buscarPorNome(String busca) {
+        return salaRepository.findByNumSalaContainingIgnoreCase(busca);
     }
 }

@@ -29,7 +29,7 @@ nav ul {
 
 nav ul li a {
     text-decoration: none;
-    color: #3b2a1a;
+    color: #556C3B;
     font-size: 15px;
     font-weight: 500;
     opacity: 0.7;
@@ -49,7 +49,14 @@ dialog {
     padding: 32px;
     width: 100%;
     max-width: 560px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    /* adiciona isso para centralizar */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    /* formato retangular */
+    height: auto;
 }
 
 dialog::backdrop {
@@ -127,12 +134,16 @@ main {
 h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #3b2a1a;
+    color: #556C3B;
     margin-bottom: 24px;
 }
 
+h2 {
+    color: #556C3B;
+}
+
 h1.auth {
-    color: #7F5539;
+    color: #556C3B;
 }
 
 /* ========== MENSAGENS ========== */
@@ -146,8 +157,8 @@ h1.auth {
 }
 
 .mensagem-erro {
-    background-color: #f8d7da;
-    color: #7F5539;
+    background-color: #e0a2df;
+    color: #bd0892;
     padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 16px;
@@ -162,15 +173,20 @@ h1.auth {
     margin-bottom: 24px;
 }
 
+.barra-acoes form {
+    display: contents;
+}
+
 .barra-busca {
     display: flex;
     align-items: center;
-    flex: 1;
     background-color: #ffffff;
     border: 1px solid #d9d0c0;
     border-radius: 8px;
     padding: 10px 16px;
     gap: 8px;
+    height: 42px;
+    flex: 1;
 }
 
 .barra-busca input {
@@ -187,15 +203,20 @@ h1.auth {
 }
 
 .btn-filtro {
+    height: 42px;
+    width: 42px;
     background-color: #ffffff;
     border: 1px solid #d9d0c0;
     border-radius: 8px;
-    padding: 10px 14px;
     cursor: pointer;
     color: #3b2a1a;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background-color 0.2s;
 }
+
 
 .btn-filtro:hover {
     background-color: #ede8dc;
@@ -203,16 +224,19 @@ h1.auth {
 
 /* ========== BOTÕES ========== */
 .btn-primario {
+    height: 42px;
     background-color: #556C3B;
     color: #ffffff;
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
+    padding: 0 20px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 
 .btn-primario:hover {
@@ -251,6 +275,14 @@ h1.auth {
 
 .btn-hoje:hover {
     background-color: #ede8dc;
+}
+
+.btn-hoje,
+.btn-secundario {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
 }
 
 /* ========== TABELA ========== */
@@ -481,6 +513,7 @@ tbody td {
     padding: 40px;
     width: 100%;
     max-width: 420px;
+    height: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
@@ -504,7 +537,7 @@ p.auth-separador::after {
 .auth-card h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #3b2a1a;
+    color: #556C3B;
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -547,7 +580,7 @@ p.auth-separador::after {
 }
 
 .auth-link a {
-    color: #5c3d1e;
+    color: #556C3B;
     text-decoration: none;
     font-weight: 500;
 }
