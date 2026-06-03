@@ -27,7 +27,12 @@ public class SessaoController {
     @Autowired
     private SalaService salaService;
 
-    // Listar sessões com filtros
+    private void popularModel(Model model) {
+        model.addAttribute("sessoes", sessaoService.listarTodas());
+        model.addAttribute("filmes", filmeService.listarPorStatus(StatusFilme.EM_CARTAZ));
+        model.addAttribute("salas", salaService.listarAtivas());
+    }
+
     @GetMapping
     public String listar(
             @RequestParam(required = false) String busca,
@@ -44,46 +49,56 @@ public class SessaoController {
             model.addAttribute("sessoes", sessaoService.listarTodas());
         }
 
+        model.addAttribute("filmes", filmeService.listarPorStatus(StatusFilme.EM_CARTAZ));
+        model.addAttribute("salas", salaService.listarAtivas());
         return "sessoes/listar";
     }
 
-    // Exibir formulário de cadastro
-    @GetMapping("/nova")
-    public String exibirFormularioCadastro(Model model) {
-        model.addAttribute("sessao", new Sessao());
-        model.addAttribute("filmes", filmeService.listarPorStatus(StatusFilme.EM_CARTAZ));
-        model.addAttribute("salas", salaService.listarAtivas());
-        return "sessoes/formulario";
-    }
-
-    // Cadastrar sessão
     @PostMapping("/nova")
     public String cadastrar(
-            @Valid @ModelAttribute Sessao sessao,
-            BindingResult resultado,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+        @Valid @ModelAttribute Sessao sessao,
+        BindingResult resultado,
+        RedirectAttributes redirectAttributes,
+        Model model) {
 
-        if (resultado.hasErrors()) {
-            model.addAttribute("filmes", filmeService.listarPorStatus(StatusFilme.EM_CARTAZ));
-            model.addAttribute("salas", salaService.listarAtivas());
-            return "sessoes/formulario";
-        }
-
-        try {
-            sessaoService.cadastrar(sessao);
-            redirectAttributes.addFlashAttribute("sucesso", "Sessão cadastrada com sucesso!");
-        } catch (RuntimeException e) {
-            model.addAttribute("erro", e.getMessage());
-            model.addAttribute("filmes", filmeService.listarPorStatus(StatusFilme.EM_CARTAZ));
-            model.addAttribute("salas", salaService.listarAtivas());
-            return "sessoes/formulario";
-        }
-
+    if (resultado.hasErrors()) {
+        redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
         return "redirect:/sessoes";
     }
 
-    // Excluir sessão
+    try {
+        sessaoService.cadastrar(sessao);
+        redirectAttributes.addFlashAttribute("sucesso", "Sessão cadastrada com sucesso!");
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("erro", e.getMessage());
+    }
+
+    return "redirect:/sessoes";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String editar(
+        @PathVariable Long id,
+        @Valid @ModelAttribute Sessao sessao,
+        BindingResult resultado,
+        RedirectAttributes redirectAttributes,
+        Model model) {
+
+    if (resultado.hasErrors()) {
+        redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+        return "redirect:/sessoes";
+    }
+
+    try {
+        sessaoService.editar(id, sessao);
+        redirectAttributes.addFlashAttribute("sucesso", "Sessão editada com sucesso!");
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("erro", e.getMessage());
+    }
+
+    return "redirect:/sessoes";
+    }
+
     @PostMapping("/excluir/{id}")
     public String excluir(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {

@@ -13,63 +13,44 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/salas")
-public class SalaController 
-{
+public class SalaController {
 
     @Autowired
     private SalaService salaService;
 
     @GetMapping
-    public String listar(Model model) 
-    {
-        model.addAttribute("salas", salaService.listarTodas());
+    public String listar(
+            @RequestParam(required = false) String busca,
+            Model model) {
+
+        if (busca != null && !busca.isBlank()) {
+            model.addAttribute("salas", salaService.buscarPorNome(busca));
+            model.addAttribute("busca", busca);
+        } else {
+            model.addAttribute("salas", salaService.listarTodas());
+        }
         return "salas/listar";
     }
 
-    @GetMapping("/nova")
-    public String exibirFormularioCadastro(Model model) 
-    {
-        model.addAttribute("sala", new Sala());
-        model.addAttribute("statusList", StatusSala.values());
-        return "salas/formulario";
-    }
-
-    // RF009 - Cadastrar sala
     @PostMapping("/nova")
     public String cadastrar(
             @Valid @ModelAttribute Sala sala,
             BindingResult resultado,
-            RedirectAttributes redirectAttributes,
-            Model model) 
-    {
+            RedirectAttributes redirectAttributes) {
 
-        if (resultado.hasErrors()) 
-        {
-            model.addAttribute("statusList", StatusSala.values());
-            return "salas/formulario";
+        if (resultado.hasErrors()) {
+            redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+            return "redirect:/salas";
         }
 
-        try 
-        {
+        try {
             salaService.cadastrar(sala);
             redirectAttributes.addFlashAttribute("sucesso", "Sala cadastrada com sucesso!");
-        } 
-        catch (RuntimeException e) 
-        {
-            model.addAttribute("erro", e.getMessage());
-            model.addAttribute("statusList", StatusSala.values());
-            return "salas/formulario";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
 
         return "redirect:/salas";
-    }
-
-    @GetMapping("/editar/{id}")
-    public String exibirFormularioEdicao(@PathVariable Long id, Model model) 
-    {
-        model.addAttribute("sala", salaService.buscarPorId(id));
-        model.addAttribute("statusList", StatusSala.values());
-        return "salas/formulario";
     }
 
     @PostMapping("/editar/{id}")
@@ -77,60 +58,45 @@ public class SalaController
             @PathVariable Long id,
             @Valid @ModelAttribute Sala sala,
             BindingResult resultado,
-            RedirectAttributes redirectAttributes,
-            Model model) 
-    {
+            RedirectAttributes redirectAttributes) {
 
-        if (resultado.hasErrors()) 
-        {
-            model.addAttribute("statusList", StatusSala.values());
-            return "salas/formulario";
+        if (resultado.hasErrors()) {
+            redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+            return "redirect:/salas";
         }
 
-        try 
-        {
+        try {
             salaService.editar(id, sala);
             redirectAttributes.addFlashAttribute("sucesso", "Sala editada com sucesso!");
-        } 
-        catch (RuntimeException e) 
-        {
-            model.addAttribute("erro", e.getMessage());
-            model.addAttribute("statusList", StatusSala.values());
-            return "salas/formulario";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
 
         return "redirect:/salas";
     }
 
     @PostMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id, RedirectAttributes redirectAttributes) 
-    {
-        try 
-        {
+    public String excluir(
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes) {
+        try {
             salaService.excluir(id);
             redirectAttributes.addFlashAttribute("sucesso", "Sala excluída com sucesso!");
-        } 
-        catch (RuntimeException e) 
-        {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
         return "redirect:/salas";
     }
 
-
     @PostMapping("/status/{id}")
     public String alterarStatus(
             @PathVariable Long id,
             @RequestParam StatusSala status,
-            RedirectAttributes redirectAttributes) 
-    {
-        try 
-        {
+            RedirectAttributes redirectAttributes) {
+        try {
             salaService.alterarStatus(id, status);
             redirectAttributes.addFlashAttribute("sucesso", "Status alterado com sucesso!");
-        } 
-        catch (RuntimeException e) 
-        {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
         return "redirect:/salas";
