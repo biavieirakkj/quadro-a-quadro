@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salas - Quadro a Quadro</title>
-    <link rel="stylesheet" th:href="@{css/style.css}" />
+    <title>Sessões - Quadro a Quadro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 
 <body>
@@ -15,8 +15,8 @@
             <span>🎬 Quadro a Quadro</span>
             <ul>
                 <li><a th:href="@{/filmes}">Filmes</a></li>
-                <li><a th:href="@{/salas}" class="active">Salas</a></li>
-                <li><a th:href="@{/sessoes}">Sessões</a></li>
+                <li><a th:href="@{/salas}">Salas</a></li>
+                <li><a th:href="@{/sessoes}" class="active">Sessões</a></li>
                 <li><a th:href="@{/usuarios}">Usuários</a></li>
                 <li><a th:href="@{/logout}">→</a></li>
             </ul>
@@ -24,15 +24,13 @@
     </header>
 
     <main>
-        <h1>Salas</h1>
+        <h1>Sessões</h1>
 
-        <!-- mensagens -->
         <p th:if="${sucesso}" class="mensagem-sucesso" th:text="${sucesso}"></p>
         <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
 
-        <!-- barra de ações -->
         <section class="barra-acoes">
-            <form th:action="@{/salas}" method="get">
+            <form th:action="@{/sessoes}" method="get">
                 <label class="barra-busca">
                     <span>🔍</span>
                     <input type="text"
@@ -40,43 +38,54 @@
                            th:value="${busca}"
                            placeholder="Buscar por sala" />
                 </label>
-                <button type="submit" class="btn-filtro">⚙️</button>
             </form>
-            <button class="btn-primario"
-                    onclick="abrirModal('modalNovaSala')">
-                + Nova sala
+            <a th:href="@{/sessoes(hoje=true)}">
+                <button type="button" class="btn-hoje">📅 Hoje</button>
+            </a>
+            <button class="btn-primario" onclick="abrirModal('modalNovaSessao')">
+                + Nova sessão
             </button>
         </section>
 
-        <!-- tabela -->
         <section class="tabela-container">
             <table>
                 <thead>
                     <tr>
                         <th>Sala</th>
-                        <th>Capacidade</th>
+                        <th>Filme</th>
+                        <th>Data</th>
+                        <th>Horário</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="sala : ${salas}">
-                        <td th:text="${sala.numSala}"></td>
-                        <td th:text="${sala.capacidade}"></td>
-                        <td class="acoes">
-                            <button class="btn-acao"
-                                    th:onclick="'abrirModalEditar(' + ${sala.numSala} + ', \'' + ${sala.capacidade} + '\')'">
-                                ✏️
-                            </button>
-                            <form th:action="@{/salas/excluir/{id}(id=${sala.numSala})}"
-                                  method="post"
-                                  onsubmit="return confirm('Deseja excluir esta sala?')">
-                                <button type="submit" class="btn-acao excluir">🗑️</button>
-                            </form>
+                    <tr th:each="sessao : ${sessoes}">
+                        <td th:text="${sessao.sala.numSala}"></td>
+                        <td th:text="${sessao.filme.titulo}"></td>
+                        <td th:text="${#temporals.format(sessao.data, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#temporals.format(sessao.horario, 'HH:mm')}"></td>
+                        <td>
+                            <div class="acoes">
+                                <button class="btn-acao"
+                                        th:data-id="${sessao.id}"
+                                        th:data-filmeid="${sessao.filme.id}"
+                                        th:data-salaid="${sessao.sala.id}"
+                                        th:data-data="${sessao.data}"
+                                        th:data-horario="${sessao.horario}"
+                                        onclick="abrirModalEditarSessaoBtn(this)">
+                                    ✏️
+                                </button>
+                                <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Deseja excluir esta sessão?')">
+                                    <button type="submit" class="btn-acao excluir">🗑️</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
-                    <tr th:if="${#lists.isEmpty(salas)}">
-                        <td colspan="3" class="tabela-vazia">
-                            Nenhuma sala cadastrada.
+                    <tr th:if="${#lists.isEmpty(sessoes)}">
+                        <td colspan="5" class="tabela-vazia">
+                            Nenhuma sessão cadastrada.
                         </td>
                     </tr>
                 </tbody>
@@ -103,35 +112,51 @@
     </main>
 
     <footer>
-        <p>Quadro a Quadro &copy; 2026</p>
+        <p>IB Systems &copy; 2025</p>
     </footer>
 
-    <!-- MODAL NOVA SALA -->
-    <dialog id="modalNovaSala">
-        <h2>Nova sala</h2>
-        <form th:action="@{/salas/nova}" method="post">
+    <!-- MODAL NOVA SESSÃO -->
+    <dialog id="modalNovaSessao">
+        <h2>Nova sessão</h2>
+        <form th:action="@{/sessoes/nova}" method="post">
+
             <label>
-                Nome
-                <input type="text"
-                       name="numSala"
-                       placeholder="Sala 01"
-                       required />
+                Título do filme
+                <select name="filme.id" required>
+                    <option value="" disabled selected>Selecione um filme</option>
+                    <option th:each="filme : ${filmes}"
+                            th:value="${filme.id}"
+                            th:text="${filme.titulo}">
+                    </option>
+                </select>
             </label>
 
             <label>
-                Capacidade
-                <input type="number"
-                       name="capacidade"
-                       placeholder="50"
-                       min="20"
-                       max="200"
-                       required />
+                Sala
+                <select name="sala.id" required>
+                    <option value="" disabled selected>Selecione uma sala</option>
+                    <option th:each="sala : ${salas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.numSala}">
+                    </option>
+                </select>
             </label>
+
+            <div class="modal-linha">
+                <label>
+                    Data
+                    <input type="date" name="data" required />
+                </label>
+                <label>
+                    Horário
+                    <input type="time" name="horario" required />
+                </label>
+            </div>
 
             <menu>
                 <button type="button"
                         class="btn-secundario"
-                        onclick="fecharModal('modalNovaSala')">
+                        onclick="fecharModal('modalNovaSessao')">
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primario">Salvar</button>
@@ -139,32 +164,46 @@
         </form>
     </dialog>
 
-    <!-- MODAL EDITAR SALA -->
-    <dialog id="modalEditarSala">
-        <h2>Editar sala</h2>
-        <form id="formEditarSala" method="post">
+    <!-- MODAL EDITAR SESSÃO -->
+    <dialog id="modalEditarSessao">
+        <h2>Editar sessão</h2>
+        <form id="formEditarSessao" method="post">
+
             <label>
-                Nome
-                <input type="text"
-                       id="editarNomeSala"
-                       name="numSala"
-                       required />
+                Título do filme
+                <select id="editarFilmeSessao" name="filme.id" required>
+                    <option th:each="filme : ${filmes}"
+                            th:value="${filme.id}"
+                            th:text="${filme.titulo}">
+                    </option>
+                </select>
             </label>
 
             <label>
-                Capacidade
-                <input type="number"
-                       id="editarCapacidadeSala"
-                       name="capacidade"
-                       min="20"
-                       max="200"
-                       required />
+                Sala
+                <select id="editarSalaSessao" name="sala.id" required>
+                    <option th:each="sala : ${salas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.numSala}">
+                    </option>
+                </select>
             </label>
+
+            <div class="modal-linha">
+                <label>
+                    Data
+                    <input type="date" id="editarDataSessao" name="data" required />
+                </label>
+                <label>
+                    Horário
+                    <input type="time" id="editarHorarioSessao" name="horario" required />
+                </label>
+            </div>
 
             <menu>
                 <button type="button"
                         class="btn-secundario"
-                        onclick="fecharModal('modalEditarSala')">
+                        onclick="fecharModal('modalEditarSessao')">
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primario">Salvar</button>
@@ -172,7 +211,23 @@
         </form>
     </dialog>
 
-    <script th:src="@{../../static/js/salaModal.js}"></script>
+    <script th:src="@{/js/modal.js}"></script>
+    <script>
+        function abrirModalEditarSessaoBtn(btn) {
+            const id = btn.getAttribute('data-id');
+            const filmeId = btn.getAttribute('data-filmeid');
+            const salaId = btn.getAttribute('data-salaid');
+            const data = btn.getAttribute('data-data');
+            const horario = btn.getAttribute('data-horario');
+
+            document.getElementById('editarFilmeSessao').value = filmeId;
+            document.getElementById('editarSalaSessao').value = salaId;
+            document.getElementById('editarDataSessao').value = data;
+            document.getElementById('editarHorarioSessao').value = horario;
+            document.getElementById('formEditarSessao').action = '/sessoes/editar/' + id;
+            abrirModal('modalEditarSessao');
+        }
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitações - Quadro a Quadro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <span> Quadro a Quadro</span>
+            <ul>
+                <li><a th:href="@{/filmes}">Filmes</a></li>
+                <li><a th:href="@{/salas}">Salas</a></li>
+                <li><a th:href="@{/sessoes}">Sessões</a></li>
+                <li><a th:href="@{/usuarios}" class="active">Usuários</a></li>
+                <li><a th:href="@{/logout}">→</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Solicitações de acesso</h1>
+
+        <p th:if="${sucesso}" class="mensagem-sucesso" th:text="${sucesso}"></p>
+        <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
+
+        <section class="barra-acoes">
+            <form th:action="@{/usuarios/solicitacoes}" method="get">
+                <label class="barra-busca">
+                    <input type="text"
+                           name="busca"
+                           th:value="${busca}"
+                           placeholder="Buscar usuário" />
+                </label>
+                <button type="submit" class="btn-filtro">⚙️</button>
+            </form>
+            <a th:href="@{/usuarios}">
+                <button type="button" class="btn-secundario">← Voltar</button>
+            </a>
+        </section>
+
+        <section class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.nome}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td>
+                            <div class="acoes">
+                                <form th:action="@{/usuarios/aprovar/{id}(id=${usuario.id})}"
+                                      method="post">
+                                    <button type="submit" class="btn-acao">✓</button>
+                                </form>
+                                <form th:action="@{/usuarios/rejeitar/{id}(id=${usuario.id})}"
+                                      method="post">
+                                    <button type="submit" class="btn-acao excluir">✗</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(usuarios)}">
+                        <td colspan="3" class="tabela-vazia">
+                            Nenhuma solicitação pendente.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="paginacao">
+            <label class="paginacao-info">
+                Resultados por página
+                <select>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                </select>
+            </label>
+            <nav class="paginacao-botoes" aria-label="Paginação">
+                <button>«</button>
+                <button>‹</button>
+                <span>Página 1 de 1</span>
+                <button>›</button>
+                <button>»</button>
+            </nav>
+        </section>
+    </main>
+
+    <footer>
+        <p>IB - Systems &copy; 2025</p>
+    </footer>
+
+</body>
+</html>
