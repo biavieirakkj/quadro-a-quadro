@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,6 +21,11 @@ public class FilmeController {
 
     @Autowired
     private FilmeService filmeService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("capa");
+    }
 
     @GetMapping
     public String listar(
@@ -49,49 +55,49 @@ public class FilmeController {
 
     @PostMapping("/novo")
     public String cadastrar(
-        @Valid @ModelAttribute Filme filme,
-        BindingResult resultado,
-        @RequestParam("capa") MultipartFile capa,
-        RedirectAttributes redirectAttributes,
-        Model model) {
+            @Valid @ModelAttribute Filme filme,
+            BindingResult resultado,
+            @RequestParam(value = "capa", required = false) MultipartFile capa,
+            RedirectAttributes redirectAttributes) {
 
-    if (resultado.hasErrors()) {
-        redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+        if (resultado.hasErrors()) {
+            resultado.getAllErrors().forEach(e -> System.out.println("erro: " + e.getDefaultMessage()));
+            redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+            return "redirect:/filmes";
+        }
+
+        try {
+            filmeService.cadastrar(filme, capa);
+            redirectAttributes.addFlashAttribute("sucesso", "Filme cadastrado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
+        }
+
         return "redirect:/filmes";
-    }
-
-    try {
-        filmeService.cadastrar(filme, capa);
-        redirectAttributes.addFlashAttribute("sucesso", "Filme cadastrado com sucesso!");
-    } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("erro", e.getMessage());
-    }
-
-    return "redirect:/filmes";
     }
 
     @PostMapping("/editar/{id}")
     public String editar(
-        @PathVariable Long id,
-        @Valid @ModelAttribute Filme filme,
-        BindingResult resultado,
-        @RequestParam("capa") MultipartFile capa,
-        RedirectAttributes redirectAttributes,
-        Model model) {
+            @PathVariable Long id,
+            @Valid @ModelAttribute Filme filme,
+            BindingResult resultado,
+            @RequestParam(value = "capa", required = false) MultipartFile capa,
+            RedirectAttributes redirectAttributes) {
 
-    if (resultado.hasErrors()) {
-        redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+        if (resultado.hasErrors()) {
+            resultado.getAllErrors().forEach(e -> System.out.println("erro: " + e.getDefaultMessage()));
+            redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+            return "redirect:/filmes";
+        }
+
+        try {
+            filmeService.editar(id, filme, capa);
+            redirectAttributes.addFlashAttribute("sucesso", "Filme editado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
+        }
+
         return "redirect:/filmes";
-    }
-
-    try {
-        filmeService.editar(id, filme, capa);
-        redirectAttributes.addFlashAttribute("sucesso", "Filme editado com sucesso!");
-    } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("erro", e.getMessage());
-    }
-
-    return "redirect:/filmes";
     }
 
     @PostMapping("/excluir/{id}")

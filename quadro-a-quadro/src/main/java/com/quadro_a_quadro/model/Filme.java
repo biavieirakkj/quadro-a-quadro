@@ -27,11 +27,11 @@ public class Filme {
     @Column(length = 500)
     private String sinopse;
 
-    @NotBlank(message = "Duração é obrigatória")
-    @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
-             message = "Duração deve estar no formato HH:MM:SS")
+    @NotNull(message = "Duração é obrigatória")
+    @Min(value = 30, message = "Duração mínima é 30 minutos")
+    @Max(value = 300, message = "Duração máxima é 300 minutos")
     @Column(nullable = false)
-    private String duracao;
+    private Integer duracao;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -87,12 +87,11 @@ public class Filme {
         this.sinopse = sinopse; 
     }
 
-    public String getDuracao() 
+    public Integer getDuracao() 
     { 
         return duracao; 
     }
-
-    public void setDuracao(String duracao) 
+    public void setDuracao(Integer duracao) 
     { 
         this.duracao = duracao; 
     }

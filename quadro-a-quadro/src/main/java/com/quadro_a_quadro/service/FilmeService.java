@@ -26,6 +26,11 @@ public class FilmeService
     {
         validarTituloDuplicado(filme.getTitulo(), null);
 
+        System.out.println("=== SALVANDO FILME ===");
+        System.out.println("capa é null: " + (capa == null));
+        System.out.println("capa isEmpty: " + (capa != null && capa.isEmpty()));
+        System.out.println("capa nome: " + (capa != null ? capa.getOriginalFilename() : "null"));
+
         if (capa != null && !capa.isEmpty()) {
             String nomeArquivo = salvarImagem(capa);
             filme.setCapa(nomeArquivo);
@@ -36,16 +41,18 @@ public class FilmeService
 
     private String salvarImagem(MultipartFile arquivo) throws IOException 
     {
-    // cria pasta se não existir
-        Path pastaUpload = Paths.get("../uploads/capas");
+        Path pastaUpload = Paths.get("uploads/capas");
+        System.out.println("pasta absoluta: " + pastaUpload.toAbsolutePath());
+        
         Files.createDirectories(pastaUpload);
-
+        
         String nomeArquivo = UUID.randomUUID() + "_" + arquivo.getOriginalFilename();
-
-    // salva o arquivo na pasta
         Path destino = pastaUpload.resolve(nomeArquivo);
+        
+        System.out.println("salvando em: " + destino.toAbsolutePath());
         Files.copy(arquivo.getInputStream(), destino);
-
+        System.out.println("arquivo salvo com sucesso!");
+        
         return nomeArquivo;
     }   
 
