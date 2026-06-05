@@ -6,8 +6,15 @@ function fecharModal(id) {
     document.getElementById(id).close();
 }
 
-function abrirModalEditar(id, capacidade) {
-    document.getElementById('editarNomeSala').value = id;
+function abrirModalEditarBtn(btn) {
+    const id = btn.getAttribute('data-id');
+    const numSala = btn.getAttribute('data-numsala');
+    const capacidade = btn.getAttribute('data-capacidade');
+    abrirModalEditar(id, numSala, capacidade);
+}
+
+function abrirModalEditar(id, numSala, capacidade) {
+    document.getElementById('editarNomeSala').value = numSala;
     document.getElementById('editarCapacidadeSala').value = capacidade;
     document.getElementById('formEditarSala').action = '/salas/editar/' + id;
     abrirModal('modalEditarSala');
