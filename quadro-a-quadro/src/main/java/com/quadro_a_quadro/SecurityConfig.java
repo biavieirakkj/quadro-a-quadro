@@ -22,15 +22,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/login", "/registro",
                     "/css/**", "/js/**", "/uploads/**",
-                    "/webjars/**", "/favicon.ico"
+                    "/webjars/**", "/favicon.ico",
+                    "/static/**"
                 ).permitAll()
                 .requestMatchers("/usuarios/**").hasRole("ADMINISTRADOR")
                 .anyRequest().authenticated()
-)
+            )
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/filmes", true)
@@ -42,9 +44,7 @@ public class SecurityConfig {
                 .permitAll()
             );
 
-        http.csrf(csrf -> csrf
-            .ignoringRequestMatchers("/h2-console/**"))
-            .headers(headers -> headers
+        http.headers(headers -> headers
             .frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();

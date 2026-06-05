@@ -61,20 +61,33 @@ public class SessaoController {
         RedirectAttributes redirectAttributes,
         Model model) {
 
-    if (resultado.hasErrors()) {
-        redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+            System.out.println("=== SESSAO RECEBIDA ===");
+            System.out.println("filme id: " + (sessao.getFilme() != null ? sessao.getFilme().getId() : "null"));
+            System.out.println("sala id: " + (sessao.getSala() != null ? sessao.getSala().getId() : "null"));
+            System.out.println("data: " + sessao.getData());
+            System.out.println("horario: " + sessao.getHorario());
+            System.out.println("tem erros: " + resultado.hasErrors());
+            resultado.getAllErrors().forEach(e -> System.out.println("erro: " + e.getDefaultMessage()));
+
+            if (resultado.hasErrors()) {
+                redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+                return "redirect:/sessoes";
+            }
+
+            if (resultado.hasErrors()) {
+                redirectAttributes.addFlashAttribute("erro", "Preencha todos os campos corretamente.");
+                return "redirect:/sessoes";
+            }
+
+            try {
+                sessaoService.cadastrar(sessao);
+                redirectAttributes.addFlashAttribute("sucesso", "Sessão cadastrada com sucesso!");
+            } catch (RuntimeException e) {
+                redirectAttributes.addFlashAttribute("erro", e.getMessage());
+            }
+
         return "redirect:/sessoes";
-    }
-
-    try {
-        sessaoService.cadastrar(sessao);
-        redirectAttributes.addFlashAttribute("sucesso", "Sessão cadastrada com sucesso!");
-    } catch (RuntimeException e) {
-        redirectAttributes.addFlashAttribute("erro", e.getMessage());
-    }
-
-    return "redirect:/sessoes";
-    }
+        }
 
     @PostMapping("/editar/{id}")
     public String editar(
