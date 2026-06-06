@@ -12,7 +12,7 @@
 
     <header>
         <nav>
-            <span> Quadro a Quadro</span>
+            <span>📽 Quadro a Quadro</span>
             <ul>
                 <li><a th:href="@{/filmes}">Filmes</a></li>
                 <li><a th:href="@{/salas}">Salas</a></li>
@@ -40,7 +40,7 @@
                 </label>
             </form>
             <a th:href="@{/sessoes(hoje=true)}">
-                <button type="button" class="btn-hoje">📅 Hoje</button>
+                <button type="button" class="btn-hoje">Hoje</button>
             </a>
             <button class="btn-primario" onclick="abrirModal('modalNovaSessao')">
                 + Nova sessão
@@ -73,12 +73,12 @@
                                         th:data-data="${sessao.data}"
                                         th:data-horario="${sessao.horario}"
                                         onclick="abrirModalEditarSessaoBtn(this)">
-                                    ✏️
+                                    🖋
                                 </button>
                                 <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}"
                                       method="post"
                                       onsubmit="return confirm('Deseja excluir esta sessão?')">
-                                    <button type="submit" class="btn-acao excluir">🗑️</button>
+                                    <button type="submit" class="btn-acao excluir">📥</button>
                                 </form>
                             </div>
                         </td>

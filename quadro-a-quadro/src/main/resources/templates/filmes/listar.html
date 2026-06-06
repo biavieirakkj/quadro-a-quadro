@@ -12,7 +12,7 @@
 
     <header>
         <nav>
-            <span>🎬 Quadro a Quadro</span>
+            <span>📽 Quadro a Quadro</span>
             <ul>
                 <li><a th:href="@{/filmes}" class="active">Filmes</a></li>
                 <li><a th:href="@{/salas}">Salas</a></li>
@@ -56,7 +56,6 @@
                      class="filme-card-capa" />
                 <div th:unless="${filme.capa != null}"
                      class="filme-card-capa-placeholder">
-                    🎬
                 </div>
 
                 <div class="filme-card-info">
@@ -80,7 +79,7 @@
                         <form th:action="@{/filmes/excluir/{id}(id=${filme.id})}"
                               method="post"
                               onsubmit="return confirm('Deseja excluir este filme?')">
-                            <button type="submit" class="btn-acao excluir">🗑️</button>
+                            <button type="submit" class="btn-acao excluir">📥</button>
                         </form>
                     </div>
                 </div>

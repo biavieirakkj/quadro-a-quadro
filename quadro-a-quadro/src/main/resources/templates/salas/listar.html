@@ -12,7 +12,7 @@
 
     <header>
         <nav>
-            <span>🎬 Quadro a Quadro</span>
+            <span>📽 Quadro a Quadro</span>
             <ul>
                 <li><a th:href="@{/filmes}">Filmes</a></li>
                 <li><a th:href="@{/salas}" class="active">Salas</a></li>
@@ -65,12 +65,12 @@
                                         th:data-numsala="${sala.numSala}"
                                         th:data-capacidade="${sala.capacidade}"
                                         onclick="abrirModalEditarBtn(this)">
-                                    ✏️
+                                    🖋
                                 </button>
                                 <form th:action="@{/salas/excluir/{id}(id=${sala.id})}"
                                       method="post"
                                       onsubmit="return confirm('Deseja excluir esta sala?')">
-                                    <button type="submit" class="btn-acao excluir">🗑️</button>
+                                    <button type="submit" class="btn-acao excluir">📥</button>
                                 </form>
                             </div>
                         </td>
