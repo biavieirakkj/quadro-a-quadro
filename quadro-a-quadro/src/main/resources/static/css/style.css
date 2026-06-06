@@ -20,6 +20,15 @@ nav {
     border-bottom: 1px solid #e0d9cc;
 }
 
+nav span {
+    font-size: 24px;       /* aumenta o tamanho */
+    font-weight: 700;      /* negrito */
+    color: #7F5539;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 nav ul {
     list-style: none;
     display: flex;
