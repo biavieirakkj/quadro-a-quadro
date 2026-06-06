@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sessões - Quadro a Quadro</title>
+    <title>Filmes - Quadro a Quadro</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 
@@ -14,9 +14,9 @@
         <nav>
             <span>🎬 Quadro a Quadro</span>
             <ul>
-                <li><a th:href="@{/filmes}">Filmes</a></li>
+                <li><a th:href="@{/filmes}" class="active">Filmes</a></li>
                 <li><a th:href="@{/salas}">Salas</a></li>
-                <li><a th:href="@{/sessoes}" class="active">Sessões</a></li>
+                <li><a th:href="@{/sessoes}">Sessões</a></li>
                 <li><a th:href="@{/usuarios}">Usuários</a></li>
                 <li><a th:href="@{/logout}">→</a></li>
             </ul>
@@ -24,139 +24,155 @@
     </header>
 
     <main>
-        <h1>Sessões</h1>
+        <h1>Filmes</h1>
 
         <p th:if="${sucesso}" class="mensagem-sucesso" th:text="${sucesso}"></p>
         <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
 
         <section class="barra-acoes">
-            <form th:action="@{/sessoes}" method="get">
+            <form th:action="@{/filmes}" method="get">
                 <label class="barra-busca">
                     <span>🔍</span>
                     <input type="text"
                            name="busca"
                            th:value="${busca}"
-                           placeholder="Buscar por sala" />
+                           placeholder="Buscar filme" />
                 </label>
             </form>
-            <a th:href="@{/sessoes(hoje=true)}">
-                <button type="button" class="btn-hoje">📅 Hoje</button>
+            <a th:href="@{/filmes(ativos=true)}">
+                <button type="button" class="btn-hoje">Ativos</button>
             </a>
-            <button class="btn-primario" onclick="abrirModal('modalNovaSessao')">
-                + Nova sessão
+            <button class="btn-primario" onclick="abrirModal('modalNovoFilme')">
+                + Novo Filme
             </button>
         </section>
 
-        <section class="tabela-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sala</th>
-                        <th>Filme</th>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="sessao : ${sessoes}">
-                        <td th:text="${sessao.sala.numSala}"></td>
-                        <td th:text="${sessao.filme.titulo}"></td>
-                        <td th:text="${#temporals.format(sessao.data, 'dd/MM/yyyy')}"></td>
-                        <td th:text="${#temporals.format(sessao.horario, 'HH:mm')}"></td>
-                        <td>
-                            <div class="acoes">
-                                <button class="btn-acao"
-                                        th:data-id="${sessao.id}"
-                                        th:data-filmeid="${sessao.filme.id}"
-                                        th:data-salaid="${sessao.sala.id}"
-                                        th:data-data="${sessao.data}"
-                                        th:data-horario="${sessao.horario}"
-                                        onclick="abrirModalEditarSessaoBtn(this)">
-                                    ✏️
-                                </button>
-                                <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}"
-                                      method="post"
-                                      onsubmit="return confirm('Deseja excluir esta sessão?')">
-                                    <button type="submit" class="btn-acao excluir">🗑️</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(sessoes)}">
-                        <td colspan="5" class="tabela-vazia">
-                            Nenhuma sessão cadastrada.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <section class="filmes-grid">
+            <article class="filme-card" th:each="filme : ${filmes}">
 
-        <section class="paginacao">
-            <label class="paginacao-info">
-                Resultados por página
-                <select>
-                    <option>10</option>
-                    <option>20</option>
-                    <option>50</option>
-                </select>
-            </label>
-            <nav class="paginacao-botoes" aria-label="Paginação">
-                <button>«</button>
-                <button>‹</button>
-                <span>Página 1 de 1</span>
-                <button>›</button>
-                <button>»</button>
-            </nav>
+                <img th:if="${filme.capa != null}"
+                     th:src="@{'/uploads/capas/' + ${filme.capa}}"
+                     th:alt="${filme.titulo}"
+                     class="filme-card-capa" />
+                <div th:unless="${filme.capa != null}"
+                     class="filme-card-capa-placeholder">
+                    🎬
+                </div>
+
+                <div class="filme-card-info">
+                    <p class="filme-card-titulo" th:text="${filme.titulo}"></p>
+
+                    <div>
+                        <span class="filme-card-genero"
+                              th:each="genero : ${filme.generos}"
+                              th:text="${genero}">
+                        </span>
+                    </div>
+
+                    <p class="filme-card-duracao">⏱ <span th:text="${filme.duracao}"></span> min</p>
+
+                    <div class="filme-card-botoes">
+                        <button class="btn-secundario"
+                                th:data-id="${filme.id}"
+                                onclick="abrirModalEditarFilmeBtn(this)">
+                            Editar
+                        </button>
+                        <form th:action="@{/filmes/excluir/{id}(id=${filme.id})}"
+                              method="post"
+                              onsubmit="return confirm('Deseja excluir este filme?')">
+                            <button type="submit" class="btn-acao excluir">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+
+            </article>
+
+            <p th:if="${#lists.isEmpty(filmes)}" class="tabela-vazia">
+                Nenhum filme cadastrado.
+            </p>
         </section>
     </main>
 
     <footer>
-        <p>IB Systems &copy; 2025</p>
+        <p>IB Systems &copy; 2026</p>
     </footer>
 
-    <!-- MODAL NOVA SESSÃO -->
-    <dialog id="modalNovaSessao">
-        <h2>Nova sessão</h2>
-        <form th:action="@{/sessoes/nova}" method="post">
+    <!-- MODAL NOVO FILME -->
+    <dialog id="modalNovoFilme">
+        <h2>Novo filme</h2>
+        <form th:action="@{/filmes/novo}"
+              method="post"
+              enctype="multipart/form-data">
 
             <label>
-                Título do filme
-                <select name="filme.id" required>
-                    <option value="" disabled selected>Selecione um filme</option>
-                    <option th:each="filme : ${filmes}"
-                            th:value="${filme.id}"
-                            th:text="${filme.titulo}">
+                Título
+                <input type="text"
+                       name="titulo"
+                       placeholder="Título do filme"
+                       required />
+            </label>
+
+            <label>
+                Duração (minutos)
+                <input type="number"
+                       name="duracao"
+                       placeholder="120"
+                       min="30"
+                       max="300"
+                       required />
+            </label>
+
+            <label>
+                Classificação
+                <select name="classificacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option th:each="c : ${classificacoes}"
+                            th:value="${c}"
+                            th:text="${c}">
                     </option>
                 </select>
             </label>
 
             <label>
-                Sala
-                <select name="sala.id" required>
-                    <option value="" disabled selected>Selecione uma sala</option>
-                    <option th:each="sala : ${salas}"
-                            th:value="${sala.id}"
-                            th:text="${sala.numSala}">
+                Gêneros
+                <select name="generos" multiple required>
+                    <option th:each="g : ${generos}"
+                            th:value="${g}"
+                            th:text="${g}">
                     </option>
                 </select>
             </label>
 
-            <div class="modal-linha">
-                <label>
-                    Data
-                    <input type="date" name="data" required />
-                </label>
-                <label>
-                    Horário
-                    <input type="time" name="horario" required />
-                </label>
-            </div>
+            <label>
+                Status
+                <select name="status" required>
+                    <option th:each="s : ${statusList}"
+                            th:value="${s}"
+                            th:text="${s}">
+                    </option>
+                </select>
+            </label>
+
+            <label>
+                Sinopse
+                <textarea name="sinopse"
+                          placeholder="Sinopse do filme"
+                          maxlength="500"
+                          rows="3">
+                </textarea>
+            </label>
+
+            <label>
+                Capa do filme
+                <input type="file"
+                       name="capa"
+                       accept=".png,.jpg,.jpeg" />
+            </label>
 
             <menu>
                 <button type="button"
                         class="btn-secundario"
-                        onclick="fecharModal('modalNovaSessao')">
+                        onclick="fecharModal('modalNovoFilme')">
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primario">Salvar</button>
@@ -164,46 +180,81 @@
         </form>
     </dialog>
 
-    <!-- MODAL EDITAR SESSÃO -->
-    <dialog id="modalEditarSessao">
-        <h2>Editar sessão</h2>
-        <form id="formEditarSessao" method="post">
+    <!-- MODAL EDITAR FILME -->
+    <dialog id="modalEditarFilme">
+        <h2>Editar filme</h2>
+        <form id="formEditarFilme"
+              method="post"
+              enctype="multipart/form-data">
 
             <label>
-                Título do filme
-                <select id="editarFilmeSessao" name="filme.id" required>
-                    <option th:each="filme : ${filmes}"
-                            th:value="${filme.id}"
-                            th:text="${filme.titulo}">
+                Título
+                <input type="text"
+                       id="editarTituloFilme"
+                       name="titulo"
+                       required />
+            </label>
+
+            <label>
+                Duração (minutos)
+                <input type="number"
+                       id="editarDuracaoFilme"
+                       name="duracao"
+                       min="30"
+                       max="300"
+                       required />
+            </label>
+
+            <label>
+                Classificação
+                <select id="editarClassificacaoFilme" name="classificacao" required>
+                    <option th:each="c : ${classificacoes}"
+                            th:value="${c}"
+                            th:text="${c}">
                     </option>
                 </select>
             </label>
 
             <label>
-                Sala
-                <select id="editarSalaSessao" name="sala.id" required>
-                    <option th:each="sala : ${salas}"
-                            th:value="${sala.id}"
-                            th:text="${sala.numSala}">
+                Gêneros
+                <select id="editarGenerosFilme" name="generos" multiple required>
+                    <option th:each="g : ${generos}"
+                            th:value="${g}"
+                            th:text="${g}">
                     </option>
                 </select>
             </label>
 
-            <div class="modal-linha">
-                <label>
-                    Data
-                    <input type="date" id="editarDataSessao" name="data" required />
-                </label>
-                <label>
-                    Horário
-                    <input type="time" id="editarHorarioSessao" name="horario" required />
-                </label>
-            </div>
+            <label>
+                Status
+                <select id="editarStatusFilme" name="status" required>
+                    <option th:each="s : ${statusList}"
+                            th:value="${s}"
+                            th:text="${s}">
+                    </option>
+                </select>
+            </label>
+
+            <label>
+                Sinopse
+                <textarea id="editarSinopseFilme"
+                          name="sinopse"
+                          maxlength="500"
+                          rows="3">
+                </textarea>
+            </label>
+
+            <label>
+                Capa do filme
+                <input type="file"
+                       name="capa"
+                       accept=".png,.jpg,.jpeg" />
+            </label>
 
             <menu>
                 <button type="button"
                         class="btn-secundario"
-                        onclick="fecharModal('modalEditarSessao')">
+                        onclick="fecharModal('modalEditarFilme')">
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primario">Salvar</button>
@@ -212,22 +263,7 @@
     </dialog>
 
     <script th:src="@{/js/modal.js}"></script>
-    <script>
-        function abrirModalEditarSessaoBtn(btn) {
-            const id = btn.getAttribute('data-id');
-            const filmeId = btn.getAttribute('data-filmeid');
-            const salaId = btn.getAttribute('data-salaid');
-            const data = btn.getAttribute('data-data');
-            const horario = btn.getAttribute('data-horario');
-
-            document.getElementById('editarFilmeSessao').value = filmeId;
-            document.getElementById('editarSalaSessao').value = salaId;
-            document.getElementById('editarDataSessao').value = data;
-            document.getElementById('editarHorarioSessao').value = horario;
-            document.getElementById('formEditarSessao').action = '/sessoes/editar/' + id;
-            abrirModal('modalEditarSessao');
-        }
-    </script>
+    <script th:src="@{/js/filmeModal.js}"></script>
 
 </body>
 </html>
