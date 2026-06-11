@@ -713,8 +713,55 @@ p.auth-separador::after {
     margin-bottom: 12px;
 }
 
+.btn-acao [data-lucide] {
+    width: 16px;
+    height: 16px;
+}
+
+.barra-busca [data-lucide] {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-filtro [data-lucide] {
+    width: 14px;
+    height: 14px;
+}
+
+.filme-card-duracao [data-lucide] {
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+}
+
+.btn-hoje [data-lucide] {
+    width: 14px;
+    height: 14px;
+}
+
 .filme-card-botoes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 8px;
+}
+
+.filme-card-botoes button,
+.filme-card-botoes form {
+    flex: 1;
+}
+
+.filme-card-botoes form button {
+    width: 100%;
+}
+
+.btn-primario {
+    justify-content: center;
+}
+
+table th:last-child,
+table td:last-child {
+    text-align: center;
+}
+
+.acoes {
+    justify-content: center;
 }

@@ -37,7 +37,7 @@
                            th:value="${busca}"
                            placeholder="Buscar usuário" />
                 </label>
-                <button type="submit" class="btn-filtro">⚙️</button>
+                <button type="submit" class="btn-filtro"><i data-lucide="sliders-horizontal"></i></button>
             </form>
             <a th:href="@{/usuarios/solicitacoes}">
                 <button type="button" class="btn-primario">Ver solicitações</button>
@@ -62,7 +62,7 @@
                                 <form th:action="@{/usuarios/excluir/{id}(id=${usuario.id})}"
                                       method="post"
                                       onsubmit="return confirm('Deseja excluir este usuário?')">
-                                    <button type="submit" class="btn-acao excluir">📥</button>
+                                    <button type="submit" class="btn-acao excluir"><i data-lucide="trash-2"></i></button>
                                 </form>
                             </div>
                         </td>
@@ -98,6 +98,8 @@
     <footer>
         <p>IB Systems &copy; 2026</p>
     </footer>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
 
 </body>
 </html>

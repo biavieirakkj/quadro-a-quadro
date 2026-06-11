@@ -32,7 +32,7 @@
         <section class="barra-acoes">
             <form th:action="@{/sessoes}" method="get">
                 <label class="barra-busca">
-                    <span>🔍</span>
+                    <span><i data-lucide="search"></i></span>
                     <input type="text"
                            name="busca"
                            th:value="${busca}"
@@ -40,7 +40,7 @@
                 </label>
             </form>
             <a th:href="@{/sessoes(hoje=true)}">
-                <button type="button" class="btn-hoje">Hoje</button>
+                <button type="button" class="btn-hoje"><i data-lucide="sliders-horizontal"></i>Hoje</button>
             </a>
             <button class="btn-primario" onclick="abrirModal('modalNovaSessao')">
                 + Nova sessão
@@ -67,18 +67,16 @@
                         <td>
                             <div class="acoes">
                                 <button class="btn-acao"
-                                        th:data-id="${sessao.id}"
-                                        th:data-filmeid="${sessao.filme.id}"
-                                        th:data-salaid="${sessao.sala.id}"
-                                        th:data-data="${sessao.data}"
-                                        th:data-horario="${sessao.horario}"
-                                        onclick="abrirModalEditarSessaoBtn(this)">
-                                    🖋
+                                        th:data-id="${sala.id}"
+                                        th:data-numsala="${sala.numSala}"
+                                        th:data-capacidade="${sala.capacidade}"
+                                        onclick="abrirModalEditarBtn(this)">
+                                    <i data-lucide="square-pen"></i>
                                 </button>
                                 <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}"
                                       method="post"
                                       onsubmit="return confirm('Deseja excluir esta sessão?')">
-                                    <button type="submit" class="btn-acao excluir">📥</button>
+                                    <button type="submit" class="btn-acao excluir"><i data-lucide="trash-2"></i></button>
                                 </form>
                             </div>
                         </td>
@@ -228,6 +226,8 @@
             abrirModal('modalEditarSessao');
         }
     </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
 
 </body>
 </html>

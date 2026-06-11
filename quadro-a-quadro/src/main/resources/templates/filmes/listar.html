@@ -32,7 +32,7 @@
         <section class="barra-acoes">
             <form th:action="@{/filmes}" method="get">
                 <label class="barra-busca">
-                    <span>🔍</span>
+                    <span><i data-lucide="search"></i></span>
                     <input type="text"
                            name="busca"
                            th:value="${busca}"
@@ -40,7 +40,7 @@
                 </label>
             </form>
             <a th:href="@{/filmes(ativos=true)}">
-                <button type="button" class="btn-hoje">Ativos</button>
+                <button type="button" class="btn-hoje"><i data-lucide="sliders-horizontal"></i> Ativos</button>
             </a>
             <button class="btn-primario" onclick="abrirModal('modalNovoFilme')">
                 + Novo Filme
@@ -68,18 +68,18 @@
                         </span>
                     </div>
 
-                    <p class="filme-card-duracao">⏱ <span th:text="${filme.duracao}"></span> min</p>
+                    <p class="filme-card-duracao"><i data-lucide="alarm-clock"></i> <span th:text="${filme.duracao}"></span> min</p>
 
                     <div class="filme-card-botoes">
-                        <button class="btn-secundario"
+                        <button class="btn-primario"
                                 th:data-id="${filme.id}"
                                 onclick="abrirModalEditarFilmeBtn(this)">
                             Editar
                         </button>
                         <form th:action="@{/filmes/excluir/{id}(id=${filme.id})}"
-                              method="post"
-                              onsubmit="return confirm('Deseja excluir este filme?')">
-                            <button type="submit" class="btn-acao excluir">📥</button>
+                            method="post"
+                            onsubmit="return confirm('Deseja excluir este filme?')">
+                            <button type="submit" class="btn-secundario">Excluir</button>
                         </form>
                     </div>
                 </div>
@@ -254,6 +254,8 @@
 
     <script th:src="@{/js/modal.js}"></script>
     <script th:src="@{/js/filmeModal.js}"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
 
 </body>
 </html>

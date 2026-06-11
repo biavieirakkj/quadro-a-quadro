@@ -32,13 +32,13 @@
         <section class="barra-acoes">
             <form th:action="@{/salas}" method="get">
                 <label class="barra-busca">
-                    <span>🔍</span>
+                    <span><i data-lucide="search"></i></span>
                     <input type="text"
                            name="busca"
                            th:value="${busca}"
                            placeholder="Buscar por sala" />
                 </label>
-                <button type="submit" class="btn-filtro">⚙️</button>
+                <button type="submit" class="btn-filtro"><i data-lucide="sliders-horizontal"></i></button>
             </form>
             <button class="btn-primario" onclick="abrirModal('modalNovaSala')">
                 + Nova sala
@@ -65,12 +65,12 @@
                                         th:data-numsala="${sala.numSala}"
                                         th:data-capacidade="${sala.capacidade}"
                                         onclick="abrirModalEditarBtn(this)">
-                                    🖋
+                                    <i data-lucide="square-pen"></i>
                                 </button>
                                 <form th:action="@{/salas/excluir/{id}(id=${sala.id})}"
                                       method="post"
                                       onsubmit="return confirm('Deseja excluir esta sala?')">
-                                    <button type="submit" class="btn-acao excluir">📥</button>
+                                    <button type="submit" class="btn-acao excluir"><i data-lucide="trash-2"></i></button>
                                 </form>
                             </div>
                         </td>
@@ -181,6 +181,8 @@
 
     <script th:src="@{/js/modal.js}"></script>
     <script th:src="@{/js/salaModal.js}"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
 
 </body>
 </html>
