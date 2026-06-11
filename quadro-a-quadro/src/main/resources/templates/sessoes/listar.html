@@ -67,10 +67,12 @@
                         <td>
                             <div class="acoes">
                                 <button class="btn-acao"
-                                        th:data-id="${sala.id}"
-                                        th:data-numsala="${sala.numSala}"
-                                        th:data-capacidade="${sala.capacidade}"
-                                        onclick="abrirModalEditarBtn(this)">
+                                        th:data-id="${sessao.id}"
+                                        th:data-filmeid="${sessao.filme.id}"
+                                        th:data-salaid="${sessao.sala.id}"
+                                        th:data-data="${sessao.data}"
+                                        th:data-horario="${sessao.horario}"
+                                        onclick="abrirModalEditarSessaoBtn(this)">
                                     <i data-lucide="square-pen"></i>
                                 </button>
                                 <form th:action="@{/sessoes/excluir/{id}(id=${sessao.id})}"
